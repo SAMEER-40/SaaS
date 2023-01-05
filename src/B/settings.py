@@ -25,8 +25,15 @@ SECRET_KEY = 'django-insecure-4=_kk0rdpw%&+^h^=w)b8f^zg*zds)kmb4ggp3a^yx7y8oovfl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
 
+    ".raiway.app"
+]
+if DEBUG:
+    ALLOWED_HOSTS += [
+        "127.0.0.1",
+        "localhost"
+    ]
 
 # Application definition
 
