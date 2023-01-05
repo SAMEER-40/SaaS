@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
 
-    ".raiway.app"
+    ".railway.app"
 ]
 if DEBUG:
     ALLOWED_HOSTS += [
