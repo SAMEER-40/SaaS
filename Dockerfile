@@ -17,11 +17,11 @@ ENV PYTHONUNBUFFERED 1
 
 # Install OS dependencies
 RUN apt-get update && apt-get install -y \
-    libpq-dev \ 
+    libpq-dev \ \
          # PostgreSQL dependencies
-    libjpeg-dev \ 
+    libjpeg-dev \ \
        # Pillow dependencies
-    libcairo2 \ 
+    libcairo2 \ \
          # CairoSVG dependencies
     gcc \
                 # Other required dependencies
@@ -42,7 +42,7 @@ COPY ./src /code
 # Install the Python project dependencies
 RUN pip install -r /tmp/requirements.txt
 
-ARG DJANGO_SECRET_KEY= 
+ARG DJANGO_SECRET_KEY
 ENV DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
 
 ARG DJANGO_DEBUG=0
