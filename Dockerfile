@@ -15,16 +15,15 @@ RUN pip install --upgrade pip
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Install OS dependencies
-RUN apt-get update && apt-get install -y \
-    libpq-dev \ \
-         # PostgreSQL dependencies
-    libjpeg-dev \ \
-       # Pillow dependencies
-    libcairo2 \ \
-         # CairoSVG dependencies
+# Install OS dependenciesRUN apt-get update && apt-get install -y \
+    # for postgres
+    libpq-dev \
+    # for Pillow
+    libjpeg-dev \
+    # for CairoSVG
+    libcairo2 \
+    # other
     gcc \
-                # Other required dependencies
     && rm -rf /var/lib/apt/lists/*
 
 # Create the project directory
