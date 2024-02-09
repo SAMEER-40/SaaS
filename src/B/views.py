@@ -14,7 +14,7 @@ this_dir = pathlib.Path(__file__).resolve().parent
 
 def home_view(request, *args, **kwargs):
     if request.user.is_authenticated:
-        print(request.user.first_name)
+        print(request.user.first_name, request.user, request.user.email)
     return about_view(request, *args, **kwargs)
 
 

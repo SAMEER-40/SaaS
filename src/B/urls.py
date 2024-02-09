@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-#from auth import views as auth_views
+from auth import views as auth_views
 #from checkouts import views as checkout_views
 #from landing import views as landing_views
 #from subscriptions import views as subscriptions_views
@@ -29,10 +29,10 @@ from .views import (
 )
 
 urlpatterns = [
-   
+    path("admin/", admin.site.urls),
     path("", home_view),
     path("about/", about_view),
-    
+    path("auth/", auth_views.login_view, name="login"),
     
 ]
 from django.conf import settings
