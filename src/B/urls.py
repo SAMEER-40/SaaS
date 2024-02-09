@@ -32,8 +32,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home_view),
     path("about/", about_view),
-    path("auth/", auth_views.login_view, name="login"),
-    
+    path("login/", auth_views.login_view),
+    path("register/", auth_views.register_view),
+    path("accounts/", include("allauth.urls")),  # Allauth urls
 ]
 from django.conf import settings
 from django.conf.urls.static import static
