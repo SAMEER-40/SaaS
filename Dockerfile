@@ -42,6 +42,8 @@ COPY ./src /code
 # Install the Python project dependencies
 RUN pip install -r /tmp/requirements.txt
 
+RUN python manage.py vendor_pull
+RUN python manage.py collectstatic --noinput
 # Set the Django project name
 ARG PROJ_NAME="B"
 
