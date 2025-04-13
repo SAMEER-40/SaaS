@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-import os
+#import os
+from decouple import config
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 print('BASE_DIR', BASE_DIR)
@@ -20,15 +20,18 @@ print('BASE_DIR', BASE_DIR)
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4=_kk0rdpw%&+^h^=w)b8f^zg*zds)kmb4ggp3a^yx7y8oovfl'
+SECRET_KEY = config("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(os.environ.get("DJANGO_DEBUG")).lower == "true"
-print('DEBUG', DEBUG)
-ALLOWED_HOSTS = [
+#DEBUG = str(os.environ.get("DJANGO_DEBUG")).lower == "true"
+DEBUG = config('DJANGO_DEBUG', cast=bool)
 
-    ".railway.app"
+ALLOWED_HOSTS = [
+    "127.0.0.1",  # Localhost IP
+    "localhost",  # Localhost name
+    ".railway.app"  # Railway domain
 ]
+
 if DEBUG:
     ALLOWED_HOSTS += [
         "127.0.0.1",
@@ -89,6 +92,42 @@ DATABASES = {
     }
 }
 
+CONN_MAX_AGE = config("CONN_MAX_AGE", cast=int, default=30)
+DATABASE_URL = config("DATABASE_URL", cast=str)
+
+
+if DATABASE_URL is not None:
+    import dj_database_url
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL, 
+            conn_max_age =CONN_MAX_AGE, 
+            conn_health_checks=True, 
+            ssl_require=True)
+    }
+
+print('DATABASES', DATABASES)
+
+# Add these at the top of your settings.py
+#import os
+#from dotenv import load_dotenv # type: ignore
+#from urllib.parse import urlparse
+
+#load_dotenv()
+
+# Replace the DATABASES section of your settings.py with this
+#tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': tmpPostgres.path.replace('/', ''),
+#        'USER': tmpPostgres.username,
+#        'PASSWORD': tmpPostgres.password,
+#        'HOST': tmpPostgres.hostname,
+#        'PORT': 5432,
+#    }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -124,7 +163,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
+STATICFILES_BASE_DIR = BASE_DIR / "staticfiles"
+STATICFILES_BASE_DIR.mkdir(exist_ok=True, parents=True)
+STATICFILES_VENDOR_DIR = STATICFILES_BASE_DIR / "vendors"
+
+# source(s) for python manage.py collectstatic 
+STATICFILES_DIRS = [
+    STATICFILES_BASE_DIR
+]
+
+# output for python manage.py collectstatic 
+# local cdn
+STATIC_ROOT = BASE_DIR / "local-cdn"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
